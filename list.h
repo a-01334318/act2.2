@@ -1,15 +1,15 @@
 // =================================================================
 //
-// File: list.h
+// File: DoubleLinkedList.h
 // Author:
-// Description: This file contains the implementation of a TDA List
+// Description: This file contains the implementation of a TDA DoubleLinkedList
 //
 // Copyright (c) 2020 by Tecnologico de Monterrey.
 // All Rights Reserved. May be reproduced for any non-commercial
 // purpose.
 // =================================================================
-#ifndef LIST_H
-#define LIST_H
+#ifndef DOUBLELINKEDLIST_H
+#define DOUBLELINKEDLIST_H
 
 #include <string>
 #include <sstream>
@@ -17,7 +17,7 @@
 
 typedef unsigned int uint;
 
-template <class T> class List;
+template <class T> class DoubleLinkedList;
 
 // =================================================================
 // Definition of the Node class
@@ -26,12 +26,12 @@ template <class T>
 class Node {
 private:
 	Node(T);
-	Node(T, Node<T>*);
+	Node(T, Node<T>*, Node<T>*);
 
 	T	    value;
-	Node<T> *next;
+	Node<T> *previous, *next;
 
-	friend class List<T>;
+	friend class DoubleLinkedList<T>;
 };
 
 // =================================================================
@@ -41,7 +41,7 @@ private:
 // @param val, stored value in the node.
 // =================================================================
 template <class T>
-Node<T>::Node(T val) : value(val), next(0) {
+Node<T>::Node(T val) : value(val), previous(NULL), next(NULL) {
 }
 
 // =================================================================
@@ -51,21 +51,22 @@ Node<T>::Node(T val) : value(val), next(0) {
 // @param nxt, the next node.
 // =================================================================
 template <class T>
-Node<T>::Node(T val, Node* nxt) : value(val), next(nxt) {
+Node<T>::Node(T val, Node *prev, Node* nxt)
+	: value(val), previous(prev), next(nxt) {
 }
 
 // =================================================================
-// Definition of the List class
+// Definition of the DoubleLinkedList class
 // =================================================================
 template <class T>
-class List {
+class DoubleLinkedList {
 private:
 	Node<T> *head;
 	uint 	size;
 
 public:
-	List();
-	~List();
+	DoubleLinkedList();
+	~DoubleLinkedList();
 
 	uint  length() const;
 	bool empty() const;
@@ -73,63 +74,62 @@ public:
 	void clear();
 	std::string toString() const;
 
-	T    front() const;
-	T    last() const;
-	T    get(uint) const;
+	T    				front() const;
+	T    				last() const;
+	std::string	before(T) const;
+	std::string	after(T) const;
 
 	void push_front(T);
 	void push_back(T);
-	void insert_at(T, uint);
+	void insert_before(T, T);
+	void insert_after(T, T);
 
 	T    pop_front();
 	T 	 pop_back();
-	T    remove_at(uint);
-
-	long int  indexOf(T) const;
 };
 
 // =================================================================
 // Constructor. Initializes both instance variables to zero.
 // =================================================================
 template <class T>
-List<T>::List() :head(NULL), size(0) {
+DoubleLinkedList<T>::DoubleLinkedList() :head(NULL), size(0) {
 }
 
 // =================================================================
-// Destructor. Remove all items from the list.
+// Destructor. Remove all items from the DoubleLinkedList.
 // =================================================================
 template <class T>
-List<T>::~List() {
+DoubleLinkedList<T>::~DoubleLinkedList() {
     clear();
 }
 
 // =================================================================
-// Returns if the list is empty or not
+// Returns if the DoubleLinkedList is empty or not
 //
-// @returns true if the list is empty, false otherwise.
+// @returns true if the DoubleLinkedList is empty, false otherwise.
 // =================================================================
 template <class T>
-bool List<T>::empty() const {
+bool DoubleLinkedList<T>::empty() const {
 	return (head == NULL);
 }
 
 // =================================================================
-// Returns the number of items in the list.
+// Returns the number of items in the DoubleLinkedList.
 //
-// @returns size, the number of items in the list.
+// @returns size, the number of items in the DoubleLinkedList.
 // =================================================================
 template <class T>
-uint List<T>::length() const {
+uint DoubleLinkedList<T>::length() const {
 	return size;
 }
 
 // =================================================================
-// Determines if an item is in the list.
+// Determines if an item is in the DoubleLinkedList.
 //
-// @returns true if val is in the list, false otherwise
+// @returns true if val is in the DoubleLinkedList, false otherwise
 // =================================================================
 template <class T>
-bool List<T>::contains(T val) const {
+bool DoubleLinkedList<T>::contains(T val) const {
 	Node<T> *p;
 
 	p = head;
@@ -143,10 +143,10 @@ bool List<T>::contains(T val) const {
 }
 
 // =================================================================
-// Remove all items from the list.
+// Remove all items from the DoubleLinkedList.
 // =================================================================
 template <class T>
-void List<T>::clear() {
+void DoubleLinkedList<T>::clear() {
 	Node<T> *p, *q;
 
 	p = head;
@@ -161,12 +161,12 @@ void List<T>::clear() {
 }
 
 // =================================================================
-// String representation of the elements in the list.
+// String representation of the elements in the DoubleLinkedList.
 //
-// @returns a string containing all the elements of the list.
+// @returns a string containing all the elements of the DoubleLinkedList.
 // =================================================================
 template <class T>
-std::string List<T>::toString() const {
+std::string DoubleLinkedList<T>::toString() const {
 	std::stringstream aux;
 	Node<T> *p;
 
@@ -184,13 +184,13 @@ std::string List<T>::toString() const {
 }
 
 // =================================================================
-// Returns the first item in the list.
+// Returns the first item in the DoubleLinkedList.
 //
-// @returns the object T at the beginning of the list.
-// @throws NoSuchElement, if the list is empty.
+// @returns the object T at the beginning of the DoubleLinkedList.
+// @throws NoSuchElement, if the DoubleLinkedList is empty.
 // =================================================================
 template <class T>
-T List<T>::front() const {
+T DoubleLinkedList<T>::front() const {
 	if (empty()) {
 		throw NoSuchElement();
 	}
@@ -199,13 +199,13 @@ T List<T>::front() const {
 }
 
 // =================================================================
-// Returns the last item in the list.
+// Returns the last item in the DoubleLinkedList.
 //
-// @returns the object T at the end of the list.
-// @throws NoSuchElement, if the list is empty.
+// @returns the object T at the end of the DoubleLinkedList.
+// @throws NoSuchElement, if the DoubleLinkedList is empty.
 // =================================================================
 template <class T>
-T List<T>::last() const {
+T DoubleLinkedList<T>::last() const {
 	Node<T> *p;
 
 	if (empty()) {
@@ -220,40 +220,63 @@ T List<T>::last() const {
 }
 
 // =================================================================
-// Returns the element that is in the position indicated by index.
+// Returns the value before val in the format: [value], or [None]
+// if val has no previous value.
 //
-// @param index, the position, index, of the required element.
-// @returns the element in index
-// @throws IndexOutOfBounds, if index >= size.
+// @returns a string with the element that is before val
+// @throws NoSuchElement, if val is not on the list
 // =================================================================
 template <class T>
-T List<T>::get(uint index) const {
-	T aux;
-
-	// TO DO
-	return aux;
+std::string DoubleLinkedList<T>::before(T val) const {
+	std::stringstream result;
+	return result.str();
 }
 
 // =================================================================
-// Add an item to the beginning of the list. Increase the size of
-// the list.
+// Returns the value after val in the format: [value], or [None]
+// if val has no next value.
+//
+// @returns a string with the element after val
+// @throws NoSuchElement, if val is not on the list
 // =================================================================
 template <class T>
-void List<T>::push_front(T val) {
-	Node<T> *q;
+std::string DoubleLinkedList<T>::after(T val) const {
+	std::stringstream result;
+	return result.str();
+}
+
+// =================================================================
+// Add an item to the beginning of the DoubleLinkedList. Increase
+// the size of the DoubleLinkedList.
+// =================================================================
+template <class T>
+void DoubleLinkedList<T>::push_front(T val) {
+	Node<T> *q, *p;
 
 	q = new Node<T>(val);
-	q->next = head;
+	if (head == NULL) {
+		q->next = NULL;
+		q->previous = NULL;
+
+	} else {
+		p = head;
+
+		q->next = p;
+		q->previous = NULL;
+
+		p->previous = q;
+	}
+
 	head = q;
 	size++;
 }
 
 // =================================================================
-// Add an item to the end of the list. Increase the size of
-// the list.
+// Add an item to the end of the DoubleLinkedList. Increase the size
+// of the DoubleLinkedList.
 // =================================================================
 template <class T>
-void List<T>::push_back(T val) {
+void DoubleLinkedList<T>::push_back(T val) {
 	Node<T> *p, *q;
 
 	if (empty()) {
@@ -268,32 +291,42 @@ void List<T>::push_back(T val) {
 
 	q = new Node<T>(val);
 	q->next = p->next;
+	q->previous = p;
+
 	p->next = q;
 	size++;
 }
 
 // =================================================================
-// Add an element in index (0 <= index <= size). The element that
-// was in that position is shifted to the right.
+// Add a new node with the value newVal in the previous position
+// of the node that contains lookingFor.
 //
-// @param val, value to be inserted.
-// @param index, the position in which it will be inserted.
-// @throws IndexOutOfBounds, if index > size.
+// @throws NoSuchElement, if lookingFor is not on the list
 // =================================================================
 template <class T>
-void List<T>::insert_at(T val, uint index) {
+void DoubleLinkedList<T>::insert_before(T lookingFor, T newVal) {
 }
 
 // =================================================================
-// Delete the item at the beginning of the list.
+// Add a new node with the value newVal in the next position of the
+// node that contains lookingFor.
 //
-// @returns the element that was at the beginning of the list.
-// @throws NoSuchElement if the list is empty
+// @throws NoSuchElement, if lookingFor is not on the list
 // =================================================================
 template <class T>
-T List<T>::pop_front() {
+void DoubleLinkedList<T>::insert_after(T lookingFor, T newVal) {
+}
+
+// =================================================================
+// Delete the item at the beginning of the DoubleLinkedList.
+//
+// @returns the element that was at the beginning of the DoubleLinkedList.
+// @throws NoSuchElement if the DoubleLinkedList is empty
+// =================================================================
+template <class T>
+T DoubleLinkedList<T>::pop_front() {
 	T val;
-	Node<T> *p;
+	Node<T> *p, *q;
 
 	if (empty()) {
 		throw NoSuchElement();
@@ -301,22 +334,31 @@ T List<T>::pop_front() {
 
 	p = head;
 
-	head = p->next;
+	if (size == 1) {
+		head = p->next;
+	} else {
+		q = p->next;
+
+		q->previous = NULL;
+		head = q;
+	}
+
 	val = p->value;
 
 	delete p;
 	size--;
+
 	return val;
 }
 
 // =================================================================
-// Delete the item at the end of the list.
+// Delete the item at the end of the DoubleLinkedList.
 //
-// @returns the element that was at the end of the list.
-// @throws NoSuchElement if the list is empty
+// @returns the element that was at the end of the DoubleLinkedList.
+// @throws NoSuchElement if the DoubleLinkedList is empty
 // =================================================================
 template <class T>
-T List<T>::pop_back() {
+T DoubleLinkedList<T>::pop_back() {
 	Node<T> *p, *q;
 	T val;
 
@@ -328,46 +370,20 @@ T List<T>::pop_back() {
 		return pop_front();
 	}
 
-	q = NULL;
 	p = head;
 	while (p->next != NULL) {
 		q = p;
 		p = p->next;
 	}
+	q = p->previous;
 
 	q->next = p->next;
-	val = p->value;
 
+	val = p->value;
 	delete p;
 	size--;
 
 	return val;
 }
 
-// =================================================================
-// Delete the element found in index (0 <= index <size).
-//
-// @param index, the position of the element to remove.
-// @returns the element removed.
-// @throws IndexOutOfBounds, if index >= size.
-// =================================================================
-template <class T>
-T List<T>::remove_at(uint index) {
-	T aux;
-	// TO DO
-	return aux;
-}
-
-// =================================================================
-// Returns the position of an item in the list.
-//
-// @param val, the item to search for.
-// @returns the position of an item in the list, -1 otherwise.
-// =================================================================
-template <class T>
-long int List<T>::indexOf(T val) const {
-	// TO DO
-	return -1;
-}
-
-#endif /* LIST_H */
+#endif /* DoubleLinkedList_H */
