@@ -1,12 +1,9 @@
 // =================================================================
 //
-// File: DoubleLinkedList.h
+// File: list.h
 // Author:
-// Description: This file contains the implementation of a TDA DoubleLinkedList
+// Date:
 //
-// Copyright (c) 2020 by Tecnologico de Monterrey.
-// All Rights Reserved. May be reproduced for any non-commercial
-// purpose.
 // =================================================================
 #ifndef DOUBLELINKEDLIST_H
 #define DOUBLELINKEDLIST_H
@@ -14,8 +11,7 @@
 #include <string>
 #include <sstream>
 #include "exception.h"
-
-typedef unsigned int uint;
+#include "header.h"
 
 template <class T> class DoubleLinkedList;
 
@@ -28,7 +24,7 @@ private:
 	Node(T);
 	Node(T, Node<T>*, Node<T>*);
 
-	T	    value;
+	T	    	value;
 	Node<T> *previous, *next;
 
 	friend class DoubleLinkedList<T>;
@@ -62,7 +58,7 @@ template <class T>
 class DoubleLinkedList {
 private:
 	Node<T> *head;
-	uint 	size;
+	uint 		size;
 
 public:
 	DoubleLinkedList();
@@ -74,10 +70,10 @@ public:
 	void clear();
 	std::string toString() const;
 
-	T    				front() const;
-	T    				last() const;
-	std::string	before(T) const;
-	std::string	after(T) const;
+	T front() const;
+	T last() const;
+	T	before(T) const;
+	T after(T) const;
 
 	void push_front(T);
 	void push_back(T);
@@ -100,7 +96,7 @@ DoubleLinkedList<T>::DoubleLinkedList() :head(NULL), size(0) {
 // =================================================================
 template <class T>
 DoubleLinkedList<T>::~DoubleLinkedList() {
-    clear();
+	clear();
 }
 
 // =================================================================
@@ -220,34 +216,33 @@ T DoubleLinkedList<T>::last() const {
 }
 
 // =================================================================
-// Returns the value before val in the format: [value], or [None]
-// if val has no previous value.
+// Returns the value before the first occurrence if certain value.
 //
-// @returns a string with the element that is before val
-// @throws NoSuchElement, if val is not on the list
+// @throws NoSuchelement, if val is not on the list.
 // =================================================================
 template <class T>
-std::string DoubleLinkedList<T>::before(T val) const {
-	std::stringstream result;
-	return result.str();
+T DoubleLinkedList<T>::before(T val) const {
+	T val;
+
+	// TO DO
+	return val;
 }
 
 // =================================================================
-// Returns the value after val in the format: [value], or [None]
-// if val has no next value.
+// Returns the value after the first occurrence of certain value.
 //
-// @returns a string with the element after val
-// @throws NoSuchElement, if val is not on the list
+// @throws NoSuchelement, if val is not on the list.
 // =================================================================
 template <class T>
-std::string DoubleLinkedList<T>::after(T val) const {
-	std::stringstream result;
-	return result.str();
+T DoubleLinkedList<T>::after(T val) const {
+	T val;
+
+	return val;
 }
 
 // =================================================================
-// Add an item to the beginning of the DoubleLinkedList. Increase
-// the size of the DoubleLinkedList.
+// Add an item to the beginning of the DoubleLinkedList. Increase the size of
+// the DoubleLinkedList.
 // =================================================================
 template <class T>
 void DoubleLinkedList<T>::push_front(T val) {
@@ -257,23 +252,21 @@ void DoubleLinkedList<T>::push_front(T val) {
 	if (head == NULL) {
 		q->next = NULL;
 		q->previous = NULL;
-
 	} else {
 		p = head;
 
-		q->next = p;
+		q->next = p; // q->next = head;
 		q->previous = NULL;
 
-		p->previous = q;
+		p->previous = q; //head->previous = q;
 	}
-
 	head = q;
 	size++;
 }
 
 // =================================================================
-// Add an item to the end of the DoubleLinkedList. Increase the size
-// of the DoubleLinkedList.
+// Add an item to the end of the DoubleLinkedList. Increase the size of
+// the DoubleLinkedList.
 // =================================================================
 template <class T>
 void DoubleLinkedList<T>::push_back(T val) {
@@ -298,23 +291,23 @@ void DoubleLinkedList<T>::push_back(T val) {
 }
 
 // =================================================================
-// Add a new node with the value newVal in the previous position
-// of the node that contains lookingFor.
+// Insert an element before the first occurrence of a certain value.
 //
-// @throws NoSuchElement, if lookingFor is not on the list
+// @throws NoSuchelement, if lookingFor is not on the list.
 // =================================================================
 template <class T>
 void DoubleLinkedList<T>::insert_before(T lookingFor, T newVal) {
+	// TO DO
 }
 
 // =================================================================
-// Add a new node with the value newVal in the next position of the
-// node that contains lookingFor.
+// Insert an element after the first occurrence of a certain value.
 //
-// @throws NoSuchElement, if lookingFor is not on the list
+// @throws NoSuchelement, if lookingFor is not on the list.
 // =================================================================
 template <class T>
 void DoubleLinkedList<T>::insert_after(T lookingFor, T newVal) {
+	// TO DO
 }
 
 // =================================================================
