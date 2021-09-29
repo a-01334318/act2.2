@@ -72,7 +72,7 @@ public:
 
 	T front() const;
 	T last() const;
-	T	before(T) const;
+	T before(T) const;
 	T after(T) const;
 
 	void push_front(T);
@@ -222,9 +222,7 @@ T DoubleLinkedList<T>::last() const {
 // =================================================================
 template <class T>
 T DoubleLinkedList<T>::before(T val) const {
-	T val;
-
-	// TO DO
+	
 	return val;
 }
 
@@ -235,8 +233,7 @@ T DoubleLinkedList<T>::before(T val) const {
 // =================================================================
 template <class T>
 T DoubleLinkedList<T>::after(T val) const {
-	T val;
-
+	
 	return val;
 }
 

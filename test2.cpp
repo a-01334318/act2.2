@@ -14,8 +14,8 @@ TEST_CASE("testing after", "[DoubleLinkedList]") {
 	b1.push_front(7); b1.push_front(6); b1.push_front(5);
 	b1.push_front(4); b1.push_front(3); b1.push_front(2);
 
-	REQUIRE(b1.after(2) == "[3]");
-	REQUIRE(b1.after(4) == "[5]");
-	REQUIRE(b1.after(7) == "[None]");
+	REQUIRE(b1.after(2) == 3);
+	REQUIRE(b1.after(4) == 5);
+	REQUIRE_THROWS_AS(b1.after(7), NoSuchElement);
 	REQUIRE_THROWS_AS(b1.after(10), NoSuchElement);
 }
